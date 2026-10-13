@@ -22,3 +22,17 @@ function fakeSearch(query, whenDone) {
 }
 
 // Your code starts here.
+const form = document.querySelector("#search-form");
+const input = document.querySelector("#query");
+const statusMessage = document.querySelector("#status");
+const results = document.querySelector("#results");
+console.log(form, input, statusMessage, results);
+
+// Step 2: run this function every time the form is submitted (Enter or the Search button).
+form.addEventListener("submit", function (event) {
+  // Stop the browser from reloading the page, which is what a form does by default.
+  event.preventDefault();
+  // Read whatever the user typed into the search box.
+  const query = input.value;
+  console.log("searching for", query);
+});
