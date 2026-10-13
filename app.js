@@ -8,7 +8,7 @@ const FAKE_BOOKS = [
   { key: "/works/OL1168083W", title: "Nineteen Eighty-Four", author_name: ["George Orwell"], first_publish_year: 1949 },
 ];
 
-// Pretends to be a slow website: after one second it calls whenDone with the books that match.
+// Pretends to be a slow website: after one second it calls whenDone with the books that match
 function fakeSearch(query, whenDone) {
   setTimeout(() => {
     const q = query.toLowerCase();
@@ -28,11 +28,42 @@ const statusMessage = document.querySelector("#status");
 const results = document.querySelector("#results");
 console.log(form, input, statusMessage, results);
 
-// Step 2: run this function every time the form is submitted (Enter or the Search button).
+// Puts the books on the page, one <li> per book
+function renderResults(books) {
+  results.textContent = "";                       // Empty the list first so old results don't pile up
+  books.forEach(function (book) {
+    const li = document.createElement("li");
+    li.textContent = book.title + " — " + book.author_name[0] + " (" + book.first_publish_year + ")";
+
+    // Adds a Save button to this book's <li>
+    const save = document.createElement("button");
+    save.textContent = "Save";
+    save.addEventListener("click", function () {
+      console.log("save", book.title);
+    });
+    li.append(save);
+
+    results.append(li);
+  });
+}
+
+// Runs this function every time the form is submitted (Enter or the Search button)
 form.addEventListener("submit", function (event) {
-  // Stop the browser from reloading the page, which is what a form does by default.
-  event.preventDefault();
-  // Read whatever the user typed into the search box.
-  const query = input.value;
+  event.preventDefault();                 // Stop the browser from reloading the page, which is what a form does by default
+  const query = input.value;              // Read whatever the user typed into the search box
   console.log("searching for", query);
+
+  // Tells the user something is happening while we wait
+  statusMessage.textContent = "Searching...";
+
+  // Asks the pretend library. The function we pass in runs a second later, when the books arrive
+  fakeSearch(query, function (books) {
+    console.log("got", books);
+    renderResults(books);
+    if (books.length === 0) {
+      statusMessage.textContent = "No books found";   // Nothing matched, so say so instead of leaving the page blank
+    } else {
+      statusMessage.textContent = "";                 // The books are here, so it clears the "Searching..." message
+    }
+  });
 });

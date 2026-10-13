@@ -47,6 +47,7 @@ Each part uses exactly what we did in class. The `practice/` and `practice-wed/`
    });
    ```
    Type something and press Enter. What does the Console show?
+When typed `dune`, the console shows `searching for dune`. Whatever I typed in the box will follow `searching for`.
 
 3. Call the fake search. Add these lines **inside** your submit listener, after the `console.log`:
    ```js
@@ -55,12 +56,14 @@ Each part uses exactly what we did in class. The `practice/` and `practice-wed/`
      });
    ```
    Search `butler`. After a second, the Console shows what `fakeSearch` sent back. How many books, and what are their titles?
+2 results came up and their titles are `Parable of the Sower` and `Kindered`
 
 4. **Show that it's working.** Inside the listener, before `fakeSearch`, add:
    ```js
      statusMessage.textContent = "Searching...";
    ```
    Then make the callback set `statusMessage.textContent` back to `""` when the books arrive.
+Done
 
 5. **Show the books.** Paste this function above your submit listener:
    ```js
@@ -74,8 +77,10 @@ Each part uses exactly what we did in class. The `practice/` and `practice-wed/`
    }
    ```
    Then call `renderResults(books);` inside your `fakeSearch` callback. Search `butler` again: two books on the page.
+Done
 
 6. **Nothing found.** Search `zzz`: the list is just empty. In the callback, add an `if` so that when `books.length === 0` the status says `No books found`.
+Done
 
 7. **A Save button on each book.** In `renderResults`, add these lines just before `results.append(li);`:
    ```js
@@ -87,6 +92,7 @@ Each part uses exactly what we did in class. The `practice/` and `practice-wed/`
        li.append(save);
    ```
    Click Save on each book. How does each button know *which* book it belongs to?
+`forEach` runs the function once per book, and each run has its own book variable. The click listener is created inside that run so it is able to see the book later when the click happens. Currently it is only saving to the consosle.
 
 **Check:** `butler` → "Searching..." for a second → two books. `zzz` → "No books found". Save → that book's title in the Console.
 
