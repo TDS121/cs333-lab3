@@ -50,6 +50,8 @@ function renderResults(books) {
     save.textContent = "Save";
     save.addEventListener("click", function () {
       console.log("save", book.title);
+      readingList.push(book);            // Add this book to the end of the array
+      renderReadingList();               // Redraw the reading list so it shows up
     });
     li.append(save);
 
@@ -64,6 +66,29 @@ async function searchBooks(query) {
   const response = await fetch(url);     // Wait for the website to answer
   const data = await response.json();    // Wait for the JSON text to be turned into objects
   return data.docs;                      // docs is the array of books
+}
+
+// Part 3: the reading list. readingList is an array that holds the books the user saved
+const readingListElement = document.querySelector("#reading-list");
+const readingList = [];
+
+// Draws the reading list on the page, with a Remove button on each book
+function renderReadingList() {
+  readingListElement.textContent = "";   // Empty it first, then draw every saved book again
+  readingList.forEach(function (book, index) {
+    const li = document.createElement("li");
+    li.textContent = book.title + " ";
+
+    const remove = document.createElement("button");
+    remove.textContent = "Remove";
+    remove.addEventListener("click", function () {
+      readingList.splice(index, 1);      // Take 1 item out of the array at this book's position
+      renderReadingList();               // Redraw so the page matches the array
+    });
+
+    li.append(remove);
+    readingListElement.append(li);
+  });
 }
 
 // Runs this function every time the form is submitted (Enter or the Search button)
