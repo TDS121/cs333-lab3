@@ -1,0 +1,26 @@
+body {
+  font-family: system-ui, sans-serif;
+  max-width: 35rem;
+  margin: 2rem auto;
+  background: blue;
+}
+
+h1 {
+  color: orange;
+}
+
+#message {
+  font-style: italic;
+}
+#list {
+  padding: 0;
+}
+
+#list li {
+  list-style: none;
+  background: greenyellow;
+  border: 1px purple;
+  border-radius: 8px;
+  padding: 0.6rem;
+  margin: 0.4rem 0;
+}

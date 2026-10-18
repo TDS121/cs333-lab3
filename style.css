@@ -1,11 +1,101 @@
+* {
+  box-sizing: border-box;
+}
 body {
-  font-family: system-ui, sans-serif;
-  max-width: 40rem;
-  margin: 2rem auto;
-  padding: 0 1rem;
+  font-family: Arial, sans-serif;
+  width: 90%;
+  max-width: 1400px;
+  margin: 40px auto;
+  padding: 0 20px;
   line-height: 1.5;
 }
+h1 {
+  font-size: 2.5rem;
+}
+a {
+  color: steelblue;
+}
+.intro {
+  background: #eee;
+  padding: 20px;
+  border-radius: 10px;
+}
+.section-title {
+  background: rgb(89, 89, 236);
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 20px 0;
+}
+li {
+  background: #f8f9fa;
+  margin-bottom: 10px;
+  padding: 15px 20px;
+  border-left: 5px solid rgb(89, 89, 236);
+  border-radius: 4px;
+}
+footer {
+ margin-top: 40px;
+}
+.footer-writing {
+  color: white;
+}
+footer ul {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+footer li {
+  margin-bottom: 0;
+}
+@media (max-width: 500px) {
+  footer ul {
+    grid-template-columns: 1fr;
+  }
+}
+.site-nav {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.site-nav a {
+  background: #f8f9fa;
+  padding: 10px 16px;
+  border-radius: 4px;
+  border-left: 5px solid rgb(89, 89, 236);
+  text-decoration: none;
+}
+/* Hover tooltip: <li class="tip" data-tip="text">...</li> */
+.tip {
+  position: relative;
+  cursor: help;
+}
+.tip::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: 20px;
+  bottom: 100%;
+  margin-bottom: 6px;
+  padding: 6px 12px;
+  background: #333;
+  color: white;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.tip:hover::after {
+  opacity: 1;
+}
 
+/* --- Book Finder layout (on top of the shared site style) --- */
 form {
   display: flex;
   gap: 0.5rem;
@@ -22,17 +112,10 @@ input {
   padding: 0.4rem;
 }
 
-ul {
-  list-style: none;
-  padding: 0;
-}
-
 li {
   display: flex;
   gap: 0.75rem;
   align-items: center;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid #ddd;
 }
 
 li img {
@@ -41,4 +124,34 @@ li img {
 
 #status {
   font-style: italic;
+}
+
+/* --- Optional: make it yours --- */
+/* Buttons in the same blue as the site's nav and section titles */
+form button,
+#results button,
+#reading-list button {
+  background: rgb(89, 89, 236);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+}
+
+form button:hover,
+#results button:hover,
+#reading-list button:hover {
+  opacity: 0.85;
+}
+
+/* Remove is a different colour so it doesn't look like Save */
+#reading-list button {
+  background: #c0392b;
+}
+
+/* Push the Save / Remove button to the right edge of each card */
+#results button,
+#reading-list button {
+  margin-left: auto;
 }

@@ -132,11 +132,11 @@ Commit: `Part 1: fake search shows results`
    ```
    Search `octavia butler`. Real books! Then search `ender's game`.
    `fakeSearch` needed a callback. Where did the code from inside that callback go?
-It moved into the submit listener itself, right after `const books = await searchBooks(query);`. With `fakeSearch` the code that used the books had to be wrapped in a function and handed over, because `fakeSearch` returned right away and called it a second later. With `await`, the listener just pauses on that line until the books arrive and then keeps going, so the same lines (`console.log("got", books)`, `renderResults(books)`, the `if` for the status) can sit directly under it like normal code. That's also why the listener needs `async` in front of `function`.
+It moved into the submit listener itself, right after `const books = await searchBooks(query);`. 
 
 10. **Missing authors.** Search `annual report`. Some books have no author, and your page breaks: look at the Console. Fix `renderResults` the way we did in Wednesday's step 6: start with `let author = "Unknown author";` and only use `book.author_name[0]` if `book.author_name` exists. Do the same for the year, leaving it out when `book.first_publish_year` doesn't exist.
     What was the error in the Console before you fixed it?
-`Uncaught (in promise) TypeError: Cannot read properties of undefined (reading '0')` at the `li.textContent = ...` line in `renderResults`. The first result for `annual report` has no `author_name` at all, so `book.author_name` is `undefined`, and `undefined[0]` throws. The page got stuck on "Searching..." because the error stopped the listener before it could clear the status. Books with no `first_publish_year` didn't throw, but they showed `(undefined)` until I left the year out when it's missing.
+`Uncaught (in promise) TypeError: Cannot read properties of undefined (reading '0')`
 
 11. **When the internet fails.** DevTools → **Network** → **Offline**, then search: stuck on "Searching...". Wrap the middle of your listener in `try` / `catch`, the way we did in Wednesday's step 5:
     ```js
@@ -290,6 +290,15 @@ Your Book Finder works; now make it look like *yours*. Everything here goes at t
 6. **Match your landing page,** so your labs look like one website.
 
 **Question:** what did you change, and why? Add a screenshot of your Book Finder before and after to this README.
+I swapped the starter `style.css` for the same one my landing page uses (Arial, the grey cards with a blue left border, the blue section-title colour), and added the two easter-egg files so Book Finder behaves like the rest of my site. Then for the buttons I used the README's button rules but with my site's blue `rgb(89, 89, 236)` instead of `--main`, so Search and Save match the nav. Remove is red so it doesn't look like Save, and Save/Remove use `margin-left: auto` to sit at the right edge of each card. I only changed how things look; all the `id`s in `index.html` are the same.
+
+Before:
+
+![Book Finder before styling](images/before.png)
+
+After:
+
+![Book Finder after styling](images/after.png)
 
 ## Deploy it
 

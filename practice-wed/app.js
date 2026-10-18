@@ -58,11 +58,10 @@ async function getBooks(query) {
     const data = await response.json();
     list.textContent = "";
     data.docs.forEach(function (book) {
-      // let author = "Unknown author";
-      // if (book.author_name) {
-      //   author = book.author_name[0];
-      // }
-      console.log(book.author_name);
+      let author = "Unknown author";
+      if (book.author_name) {
+        author = book.author_name[0];
+      }
       addItem(book.title + " — " + author);
     });
     message.textContent = "Found " + data.docs.length + " books";
@@ -71,3 +70,8 @@ async function getBooks(query) {
     message.textContent = "Couldn't reach the library. Check your connection.";
   }
 }
+
+form.addEventListener("submit", function (event) {
+  event.preventDefault();
+  getBooks(input.value);
+});
