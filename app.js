@@ -33,7 +33,17 @@ function renderResults(books) {
   results.textContent = "";                       // Empty the list first so old results don't pile up
   books.forEach(function (book) {
     const li = document.createElement("li");
-    li.textContent = book.title + " — " + book.author_name[0] + " (" + book.first_publish_year + ")";
+
+    // Some real books have no author or no year, so start with a fallback and only use the real one if it exists
+    let author = "Unknown author";
+    if (book.author_name) {
+      author = book.author_name[0];
+    }
+    let year = "";
+    if (book.first_publish_year) {
+      year = " (" + book.first_publish_year + ")";
+    }
+    li.textContent = book.title + " — " + author + year;
 
     // Adds a Save button to this book's <li>
     const save = document.createElement("button");
@@ -47,8 +57,18 @@ function renderResults(books) {
   });
 }
 
+// Part 2: the real search. Asks Open Library and gives back the list of books with return
+async function searchBooks(query) {
+  const url = "https://openlibrary.org/search.json?limit=10&q=" + encodeURIComponent(query);
+  console.log("fetching", url);
+  const response = await fetch(url);     // Wait for the website to answer
+  const data = await response.json();    // Wait for the JSON text to be turned into objects
+  return data.docs;                      // docs is the array of books
+}
+
 // Runs this function every time the form is submitted (Enter or the Search button)
-form.addEventListener("submit", function (event) {
+// async so we can use await inside it
+form.addEventListener("submit", async function (event) {
   event.preventDefault();                 // Stop the browser from reloading the page, which is what a form does by default
   const query = input.value;              // Read whatever the user typed into the search box
   console.log("searching for", query);
@@ -56,14 +76,19 @@ form.addEventListener("submit", function (event) {
   // Tells the user something is happening while we wait
   statusMessage.textContent = "Searching...";
 
-  // Asks the pretend library. The function we pass in runs a second later, when the books arrive
-  fakeSearch(query, function (books) {
+  // try runs the search; if anything inside fails (like no internet) it jumps to catch instead of getting stuck
+  try {
+    const books = await searchBooks(query);   // Pause here until the books arrive, then carry on
     console.log("got", books);
     renderResults(books);
+
     if (books.length === 0) {
       statusMessage.textContent = "No books found";   // Nothing matched, so say so instead of leaving the page blank
     } else {
       statusMessage.textContent = "";                 // The books are here, so it clears the "Searching..." message
     }
-  });
+  } catch (error) {
+    console.log("something went wrong:", error);
+    statusMessage.textContent = "Couldn't reach the library. Check your connection.";
+  }
 });
