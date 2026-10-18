@@ -132,9 +132,11 @@ Commit: `Part 1: fake search shows results`
    ```
    Search `octavia butler`. Real books! Then search `ender's game`.
    `fakeSearch` needed a callback. Where did the code from inside that callback go?
+It moved into the submit listener itself, right after `const books = await searchBooks(query);`. With `fakeSearch` the code that used the books had to be wrapped in a function and handed over, because `fakeSearch` returned right away and called it a second later. With `await`, the listener just pauses on that line until the books arrive and then keeps going, so the same lines (`console.log("got", books)`, `renderResults(books)`, the `if` for the status) can sit directly under it like normal code. That's also why the listener needs `async` in front of `function`.
 
 10. **Missing authors.** Search `annual report`. Some books have no author, and your page breaks: look at the Console. Fix `renderResults` the way we did in Wednesday's step 6: start with `let author = "Unknown author";` and only use `book.author_name[0]` if `book.author_name` exists. Do the same for the year, leaving it out when `book.first_publish_year` doesn't exist.
     What was the error in the Console before you fixed it?
+`Uncaught (in promise) TypeError: Cannot read properties of undefined (reading '0')` at the `li.textContent = ...` line in `renderResults`. The first result for `annual report` has no `author_name` at all, so `book.author_name` is `undefined`, and `undefined[0]` throws. The page got stuck on "Searching..." because the error stopped the listener before it could clear the status. Books with no `first_publish_year` didn't throw, but they showed `(undefined)` until I left the year out when it's missing.
 
 11. **When the internet fails.** DevTools → **Network** → **Offline**, then search: stuck on "Searching...". Wrap the middle of your listener in `try` / `catch`, the way we did in Wednesday's step 5:
     ```js
@@ -186,6 +188,7 @@ Commit: `Part 2: real search with fetch`
     ```
     `push` adds an item to the end of an array. Save a few books, then remove one.
     Reload the page. What happens to your reading list, and why?
+The reading list is empty again. `readingList` is a plain array that lives in the page's memory: `const readingList = [];` runs every time `app.js` loads, so a reload starts from a fresh empty array and the old one is thrown away. Nothing was ever written anywhere that survives a reload (that's what the `localStorage` extra is for).
 
 **Check:** Save adds a book to "My reading list"; Remove takes it off.
 
@@ -294,6 +297,7 @@ Your Book Finder works; now make it look like *yours*. Everything here goes at t
 15. SFTP `index.html`, `style.css` and `app.js` into a `lab3/` folder in your web folder, plus your updated landing page.
 16. Open `https://lampforall.cis251296.projects.jetstream-cloud.org/students/yourname/lab3/` and test everything there: search, Save, Remove.
 17. One bug you hit in this lab: what was it, and what did the Console show you?
+    In the Wednesday practice page I commented out the `let author = "Unknown author"` lines inside the `forEach` but left `addItem(book.title + " — " + author)` using it. Every search showed "Couldn't reach the library. Check your connection." even though the internet was fine, because the error happened inside the `try` and the `catch` turned it into that message. The Console showed `something went wrong: ReferenceError: author is not defined`, which pointed at the real problem: the catch block was hiding a bug in my own code, not a network failure. Separately, the submit listener was still commented out, so for a while clicking Search just reloaded the page and the Console cleared, which the table at the bottom says means a missing `event.preventDefault()` (or in my case, no listener at all).
 18. Push this repo (code **and** this README with your answers) to **your own GitHub repo**.
 19. Submit in Moodle three links: (1) your GitHub repo, (2) your landing page, and (3) your live Book Finder.
 
