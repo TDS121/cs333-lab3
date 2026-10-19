@@ -188,7 +188,7 @@ Commit: `Part 2: real search with fetch`
     ```
     `push` adds an item to the end of an array. Save a few books, then remove one.
     Reload the page. What happens to your reading list, and why?
-The reading list is empty again. `readingList` is a plain array that lives in the page's memory: `const readingList = [];` runs every time `app.js` loads, so a reload starts from a fresh empty array and the old one is thrown away. Nothing was ever written anywhere that survives a reload (that's what the `localStorage` extra is for).
+The reading list is empty again. `readingList` is a plain array that lives in the page's memory `const readingList = [];` runs every time `app.js` loads, so a reload starts from a fresh empty array and the old one is thrown away
 
 **Check:** Save adds a book to "My reading list"; Remove takes it off.
 
@@ -290,23 +290,22 @@ Your Book Finder works; now make it look like *yours*. Everything here goes at t
 6. **Match your landing page,** so your labs look like one website.
 
 **Question:** what did you change, and why? Add a screenshot of your Book Finder before and after to this README.
-I swapped the starter `style.css` for the same one my landing page uses (Arial, the grey cards with a blue left border, the blue section-title colour), and added the two easter-egg files so Book Finder behaves like the rest of my site. Then for the buttons I used the README's button rules but with my site's blue `rgb(89, 89, 236)` instead of `--main`, so Search and Save match the nav. Remove is red so it doesn't look like Save, and Save/Remove use `margin-left: auto` to sit at the right edge of each card. I only changed how things look; all the `id`s in `index.html` are the same.
-
-Before:
-
-![Book Finder before styling](images/before.png)
-
-After:
-
-![Book Finder after styling](images/after.png)
+![Before](images/Screenshot%202026-10-18%20at%205.19.27 PM.png)
+![After](images/Screenshot%202026-10-18%20at%205.21.56 PM.png)
 
 ## Deploy it
 
 14. Add Lab 3 to your landing page: a link `href="lab3/"` and a line saying what it is. Check that the **← Home** link at the top of Book Finder goes back.
+Done
+
 15. SFTP `index.html`, `style.css` and `app.js` into a `lab3/` folder in your web folder, plus your updated landing page.
+Done
+
 16. Open `https://lampforall.cis251296.projects.jetstream-cloud.org/students/yourname/lab3/` and test everything there: search, Save, Remove.
+Done
 17. One bug you hit in this lab: what was it, and what did the Console show you?
-    In the Wednesday practice page I commented out the `let author = "Unknown author"` lines inside the `forEach` but left `addItem(book.title + " — " + author)` using it. Every search showed "Couldn't reach the library. Check your connection." even though the internet was fine, because the error happened inside the `try` and the `catch` turned it into that message. The Console showed `something went wrong: ReferenceError: author is not defined`, which pointed at the real problem: the catch block was hiding a bug in my own code, not a network failure. Separately, the submit listener was still commented out, so for a while clicking Search just reloaded the page and the Console cleared, which the table at the bottom says means a missing `event.preventDefault()` (or in my case, no listener at all).
+In the Wednesday practice page I commented out the `let author = "Unknown author"` lines inside the `forEach` but left `addItem(book.title + " — " + author)` using it. Every search showed "Couldn't reach the library. Check your connection." even though the internet was fine, because the error happened inside the `try` and the `catch` turned it into that message. The Console showed `something went wrong: ReferenceError: author is not defined`
+
 18. Push this repo (code **and** this README with your answers) to **your own GitHub repo**.
 19. Submit in Moodle three links: (1) your GitHub repo, (2) your landing page, and (3) your live Book Finder.
 
